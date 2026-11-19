@@ -26,3 +26,11 @@ SELECT COUNT(*) linhas_itens,COUNT(DISTINCT p.pid) pedidos,SUM(i.qtd*i.preco) fa
 SELECT COUNT(*) pedidos,SUM(total) faturamento,ROUND(AVG(total),2) ticket_medio
  FROM (SELECT p.pid,SUM(i.qtd*i.preco) total FROM PEDIDO p JOIN ITEM i ON p.pid=i.pid
  WHERE p.status='CONCLUIDO' GROUP BY p.pid) t;
+
+
+ -- Respostas do item 5
+ -- Encontre produtos nunca vendidos em pedido concluído 
+ SELECT p.rid, p.descricao FROM PRODUTO AS p WHERE NOT EXISTS (     SELECT 1     FROM ITEM AS i     JOIN PEDIDO AS ped ON ped.pid = i.pid     WHERE i.rid
+= p.rid       AND ped.status = 'CONCLUIDO' ) ORDER BY p.rid;
+
+ -- produtos nunca presentes em qualquer ITEM.

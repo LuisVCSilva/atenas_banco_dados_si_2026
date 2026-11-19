@@ -13,3 +13,17 @@ SELECT cidade FROM CLIENTE WHERE cid<=3 UNION SELECT cidade FROM CLIENTE WHERE c
 SELECT cidade FROM CLIENTE WHERE cid<=3 UNION ALL SELECT cidade FROM CLIENTE WHERE cid>=3;
 -- NOT IN e NULL: a comparação pode resultar UNKNOWN.
 SELECT 5 NOT IN (1,2,NULL) AS resultado;
+
+ -- respostas
+ -- Encontre produtos nunca vendidos em pedido concluído e diferencie de produtos nunca presentes em qualquer ITEM.
+
+SELECT p.rid, p.descricao
+FROM PRODUTO AS p
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM ITEM AS i
+    JOIN PEDIDO AS ped ON ped.pid = i.pid
+    WHERE i.rid = p.rid
+      AND ped.status = 'CONCLUIDO'
+)
+ORDER BY p.rid;
